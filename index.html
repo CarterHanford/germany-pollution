@@ -1,11 +1,76 @@
- <title>Carter's JSAPI 4.18 Map</title>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>Germany Pollutant Types</title>
 
-<link rel="stylesheet" href="style.css"/>
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+    </style>
 
-<link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/light/main.css"/>
-<script src="https://js.arcgis.com/4.18/"></script>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/light/main.css" />
+    
+    <link rel="stylesheet" href="https://s3-us-west-1.amazonaws.com/patterns.esri.com/files/calcite-web/1.2.5/css/calcite-web.min.css">
+    
+    <link rel="stylesheet" href="https://js.arcgis.com/4.18/esri/themes/dark-blue/main.css">
+    
+     <div class="panel panel-dark">
+  <h4 class="trailer-half">Germany Emissions Interactive Webmap</h4>
+  <p class="trailer-0">Data from <code>datahub.io</code></p>
+  </div>
 
-<body>
-  <div id="viewDiv"></div>
-  <script src="script.js"></script>
-</body>
+    <script src="https://js.arcgis.com/4.18/"></script>
+
+    <script>
+      require(["esri/views/MapView", "esri/WebMap", "esri/widgets/Legend"], function(MapView, WebMap, Legend) {
+
+        var webmap = new WebMap({
+        portalItem: { // autocasts as new PortalItem()
+          id: "f2273d85af1a4bd1a60737322ee97186"
+        }
+      });
+
+        var view = new MapView({
+          map: webmap,
+          container: "viewDiv"
+        });
+        
+        view.when(function() {
+          // set variables for layers
+          var germany_boundary = webmap.layers.getItemAt(0);
+          var emissions = webmap.layers.getItemAt(1);
+          
+          // create legend
+          var legend = new Legend({
+            view: view,
+            layerInfos: [
+              {
+                layer: germany_boundary, 
+                title: "Germany Country Boundary"
+              }, {
+              layer:emissions,
+              title:'Germany Emissions by Pollutant Type'
+              }
+            ]
+          });
+
+          // add legend widget to map
+          view.ui.add(legend, "top-right");
+          
+        });
+        
+      });
+    </script>
+  </head>
+
+  <body>
+    <div id="viewDiv"></div>
+  </body>
+</html>
